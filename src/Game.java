@@ -22,7 +22,7 @@ public class Game extends JPanel implements KeyListener{
 		numBalls = 0;
 		aimerStart = masterBall.x;
 		aimerX = 0;
-		testBlock = new Block(1);
+		testBlock = new Block(5);
 		setupGUI();
 		gameLoop();
 	}
@@ -47,17 +47,25 @@ public class Game extends JPanel implements KeyListener{
 		if(!masterBall.isMoving){
 			aimerStart = masterBall.x;
 			g.setColor(Color.BLUE);
-			g.drawLine(masterBall.x+12, masterBall.y+12, (aimerStart+aimerX), 0);
+			g.drawLine((int)masterBall.center.getX(),(int) masterBall.center.getY(), (aimerStart+aimerX), 0);
 		}
+	}
+	
+	private void blockUpdate(){
+		masterBall.updateGame = false;
+		testBlock.update();
+		//TODO: add new blocks
 	}
 	
     //keyListener stuff
 	public void keyPressed(KeyEvent e){
 		//System.out.println(e.getKeyCode());
 		if(e.getKeyCode() == 38){
-			masterBall.isMoving = true;
-			masterBall.setDxDy(aimerX);
-			aimerX = 0;
+			if(!masterBall.isMoving){
+				masterBall.isMoving = true;
+				masterBall.setDxDy(aimerX);
+				aimerX = 0;
+			}
 		}
 		if(e.getKeyCode() == 39){
 			if(aimerStart+aimerX > 1000){
@@ -87,6 +95,8 @@ public class Game extends JPanel implements KeyListener{
 			}catch(Exception e){e.printStackTrace();}
 			masterBall.update(WIDTH,HEIGHT);
 			testBlock.collision(masterBall);
+			if(masterBall.updateGame)
+				blockUpdate();
 			repaint();
 		}
 		

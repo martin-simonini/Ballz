@@ -1,7 +1,7 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.util.Vector;
+
 
 public class Block {
 	final int WIDTH;
@@ -23,15 +23,26 @@ public class Block {
 		if(!isDead){
 			g.setColor(this.color);
 			g.fillRect(this.x, this.y, WIDTH, WIDTH);
+			
+			g.setColor(Color.white);
+			g.drawString(""+hitpoints, (int)center.getX(), (int)center.getY());
 		}
 	}
 	
 	public void collision(Balls b){
-		int distance = (int) Math.abs(Math.sqrt(Math.pow(b.center.getX()-this.center.getX(),2)+Math.pow(b.center.getY()-this.center.getY(), 2)));
-		if(distance < b.radius + (WIDTH/2))
+		int distance = (int) Math.sqrt(Math.pow(b.center.getX()-this.center.getX(), 2)+Math.pow(b.center.getY()-this.center.getY(), 2));
+		if(distance < b.radius + (WIDTH/2)){
 			hitpoints--;
+			b.dx *= -1;
+			b.dy *= -1;
+		}
 		if(hitpoints < 1)
 			isDead = true;
 			
+	}
+	
+	public void update(){
+		this.y += 50;
+		this.center.move(this.x,this.y);
 	}
 }

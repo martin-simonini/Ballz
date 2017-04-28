@@ -8,6 +8,7 @@ public class Balls {
 	double dx,dy;
 	Color color;
 	boolean isMoving;
+	boolean updateGame;
 	final int MAXSPEED;
 	Point center;
 	
@@ -18,31 +19,34 @@ public class Balls {
 		
 		this.dx = 0.0;
 		this.dy = -5.0;
-		radius = 25;
+		radius = 15;
 		isMoving = false;
+		updateGame = false;
 		MAXSPEED = 5;
 		center = new Point(this.x+radius,this.y+radius);
 	}
 	
 	public void draw(Graphics g){
 		g.setColor(color);
-		g.fillOval(x, y, radius, radius);
+		g.fillOval(x, y, radius*2, radius*2);
 	}
 	public void update(int width, int height){
 		if(isMoving){
 			if((y+dy) < 0)
 				dy *= -1;
-			if((y+2*radius)+dy > height){
+			if(y+(3*radius)+dy > height){
 				isMoving = false;
+				updateGame = true;
 				dy *= -1;
 			}
-			if(((x+radius)+dx) > width || (x+dx) < 0){
+			if(((x+(2*radius))+dx) > width || (x+dx) < 0){
 				dx *= -1;
 				x += dx;
 			}
 		
 		x += dx;
 		y += dy;
+		center.move(x+radius, y+radius);
 		//System.out.println(x);
 	}
 	}
